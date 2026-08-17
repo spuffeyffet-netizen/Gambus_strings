@@ -58,11 +58,51 @@
   .sub{
     font-size:14px;
     color:var(--ivory-dim);
-    margin-bottom:18px;
+    margin-bottom:14px;
     text-align:center;
-    max-width:420px;
+    max-width:440px;
     padding:0 20px;
     line-height:1.5;
+  }
+
+  /* --- Toggle --- */
+  .toggle{
+    display:flex;
+    gap:4px;
+    background:rgba(0,0,0,.28);
+    border:1px solid rgba(207,155,58,.4);
+    border-radius:999px;
+    padding:4px;
+    margin-bottom:8px;
+  }
+
+  .toggle button{
+    font-family:'Inter', sans-serif;
+    font-size:12.5px;
+    font-weight:500;
+    letter-spacing:.02em;
+    padding:8px 16px;
+    border:none;
+    border-radius:999px;
+    background:transparent;
+    color:var(--ivory-dim);
+    cursor:pointer;
+    transition: background 150ms ease, color 150ms ease;
+    white-space:nowrap;
+  }
+
+  .toggle button.active{
+    background:var(--brass);
+    color:var(--wood-dark);
+  }
+
+  .type-caption{
+    font-size:12px;
+    color:var(--brass-bright);
+    opacity:.9;
+    margin-bottom:14px;
+    text-align:center;
+    min-height:16px;
   }
 
   .stage{
@@ -73,6 +113,9 @@
   }
 
   svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+  .instrument{ display:none; }
+  .instrument.active{ display:block; }
 
   .string-hit{
     cursor:pointer;
@@ -97,7 +140,7 @@
   }
 
   @keyframes vibrate{
-    0%{ transform: scaleY(1) translateY(0); }
+    0%{ transform: translateY(0); }
     15%{ transform: translateY(-3px); }
     30%{ transform: translateY(2.4px); }
     45%{ transform: translateY(-1.6px); }
@@ -142,7 +185,8 @@
   }
 
   .unlock{
-    margin-top:8px;
+    margin-top:2px;
+    margin-bottom:14px;
     padding:10px 22px;
     background:transparent;
     border:1px solid var(--brass);
@@ -167,58 +211,121 @@
 
   <div class="eyebrow">Gambi presents</div>
   <h1>Play the Gambus</h1>
-  <p class="sub">Tap or click any string to hear it ring. Eleven strings, tuned across two octaves — try plucking a few in a row.</p>
+  <p class="sub">Tap or click any string to hear it ring. Switch between the two Gambus types below — each has its own build and tone.</p>
+
+  <div class="toggle" id="typeToggle">
+    <button class="active" data-type="hadhramaut">Gambus Hadhramaut</button>
+    <button data-type="melayu">Gambus Melayu</button>
+  </div>
+  <div class="type-caption" id="typeCaption">Wooden soundboard, 11 strings — resembles the Arabian oud, brighter tone.</div>
 
   <button class="unlock" id="unlockBtn">Tap to enable sound</button>
 
   <div class="stage">
-    <svg id="gambusSvg" viewBox="0 -40 400 600" xmlns="http://www.w3.org/2000/svg">
 
+    <!-- ===================== GAMBUS HADHRAMAUT ===================== -->
+    <svg class="instrument active" id="svgHadhramaut" viewBox="0 -40 400 600" xmlns="http://www.w3.org/2000/svg">
       <!-- neck -->
       <rect x="178" y="0" width="44" height="150" rx="6" fill="#4a2c17" stroke="#2a170c" stroke-width="2"/>
-      <!-- pegbox -->
-      <path d="M170 0 L230 0 L222 -34 L178 -34 Z" fill="#3a2313" stroke="#2a170c" stroke-width="2"/>
-      <circle cx="182" cy="-18" r="4" fill="#cf9b3a"/>
-      <circle cx="196" cy="-24" r="4" fill="#cf9b3a"/>
-      <circle cx="210" cy="-24" r="4" fill="#cf9b3a"/>
-      <circle cx="224" cy="-18" r="4" fill="#cf9b3a"/>
+      <!-- pegbox, angled back like an oud -->
+      <path d="M168 0 L232 0 L226 -40 L174 -40 Z" fill="#3a2313" stroke="#2a170c" stroke-width="2"/>
+      <circle cx="181" cy="-22" r="4" fill="#cf9b3a"/>
+      <circle cx="195" cy="-30" r="4" fill="#cf9b3a"/>
+      <circle cx="205" cy="-30" r="4" fill="#cf9b3a"/>
+      <circle cx="219" cy="-22" r="4" fill="#cf9b3a"/>
 
       <!-- frets suggestion -->
       <line x1="178" y1="40" x2="222" y2="40" stroke="#cf9b3a" stroke-width="1.5" opacity=".5"/>
       <line x1="178" y1="80" x2="222" y2="80" stroke="#cf9b3a" stroke-width="1.5" opacity=".5"/>
       <line x1="178" y1="120" x2="222" y2="120" stroke="#cf9b3a" stroke-width="1.5" opacity=".5"/>
 
-      <!-- pear-shaped body -->
+      <!-- deep, rounder oud-like bowl body -->
       <path d="
         M200 140
-        C 300 150, 372 240, 358 340
-        C 346 440, 268 512, 200 520
-        C 132 512, 54 440, 42 340
-        C 28 240, 100 150, 200 140
+        C 312 148, 386 250, 366 348
+        C 348 452, 260 522, 200 528
+        C 140 522, 52 452, 34 348
+        C 14 250, 88 148, 200 140
         Z"
         fill="#5a341b" stroke="#2a170c" stroke-width="3"/>
 
-      <!-- subtle wood grain -->
-      <path d="M90 220 C 150 260, 250 260, 310 220" stroke="#3a2313" stroke-width="1" opacity=".35" fill="none"/>
-      <path d="M75 300 C 150 340, 250 340, 325 300" stroke="#3a2313" stroke-width="1" opacity=".3" fill="none"/>
-      <path d="M80 400 C 150 430, 250 430, 320 400" stroke="#3a2313" stroke-width="1" opacity=".3" fill="none"/>
+      <!-- wood grain, more pronounced (wooden soundboard) -->
+      <path d="M80 210 C 150 255, 250 255, 320 210" stroke="#2a170c" stroke-width="1.2" opacity=".4" fill="none"/>
+      <path d="M62 290 C 150 335, 250 335, 338 290" stroke="#2a170c" stroke-width="1.2" opacity=".38" fill="none"/>
+      <path d="M60 370 C 150 408, 250 408, 340 370" stroke="#2a170c" stroke-width="1.2" opacity=".36" fill="none"/>
+      <path d="M78 440 C 150 468, 250 468, 322 440" stroke="#2a170c" stroke-width="1.2" opacity=".34" fill="none"/>
 
-      <!-- rosette / sound hole -->
-      <circle cx="200" cy="330" r="46" fill="#0c0704"/>
-      <circle class="rosette-ring" cx="200" cy="330" r="46"/>
-      <circle class="rosette-ring" cx="200" cy="330" r="38"/>
-      <g class="rosette-star" transform="translate(200,330)">
-        <polygon points="0,-30 7,-9 28,-9 11,4 17,25 0,12 -17,25 -11,4 -28,-9 -7,-9"/>
+      <!-- three small rosettes, oud-style -->
+      <circle cx="200" cy="320" r="42" fill="#0c0704"/>
+      <circle class="rosette-ring" cx="200" cy="320" r="42"/>
+      <circle class="rosette-ring" cx="200" cy="320" r="34"/>
+      <g class="rosette-star" transform="translate(200,320)">
+        <polygon points="0,-27 6,-8 25,-8 10,4 15,23 0,11 -15,23 -10,4 -25,-8 -6,-8"/>
       </g>
+      <circle cx="140" cy="380" r="14" fill="#0c0704" opacity=".9"/>
+      <circle cx="260" cy="380" r="14" fill="#0c0704" opacity=".9"/>
 
       <!-- bridge -->
       <rect x="160" y="452" width="80" height="10" rx="3" fill="#2a170c"/>
 
-      <!-- 11 strings, tail at bridge, head at top of neck -->
-      <!-- string x positions spread across neck/body -->
-      <g id="strings"></g>
-
+      <g id="stringsHadhramaut"></g>
     </svg>
+
+    <!-- ===================== GAMBUS MELAYU ===================== -->
+    <svg class="instrument" id="svgMelayu" viewBox="0 -40 400 600" xmlns="http://www.w3.org/2000/svg">
+      <!-- neck -->
+      <rect x="178" y="0" width="44" height="150" rx="6" fill="#4a2c17" stroke="#2a170c" stroke-width="2"/>
+      <!-- straighter, simpler pegbox -->
+      <path d="M172 0 L228 0 L222 -30 L178 -30 Z" fill="#3a2313" stroke="#2a170c" stroke-width="2"/>
+      <circle cx="183" cy="-16" r="4" fill="#cf9b3a"/>
+      <circle cx="197" cy="-22" r="4" fill="#cf9b3a"/>
+      <circle cx="209" cy="-22" r="4" fill="#cf9b3a"/>
+      <circle cx="223" cy="-16" r="4" fill="#cf9b3a"/>
+
+      <line x1="178" y1="40" x2="222" y2="40" stroke="#cf9b3a" stroke-width="1.5" opacity=".5"/>
+      <line x1="178" y1="80" x2="222" y2="80" stroke="#cf9b3a" stroke-width="1.5" opacity=".5"/>
+      <line x1="178" y1="120" x2="222" y2="120" stroke="#cf9b3a" stroke-width="1.5" opacity=".5"/>
+
+      <!-- smaller, gentler pear-shaped body -->
+      <path d="
+        M200 140
+        C 290 149, 352 232, 340 322
+        C 330 412, 262 490, 200 496
+        C 138 490, 70 412, 60 322
+        C 48 232, 110 149, 200 140
+        Z"
+        fill="#8a6a3f" stroke="#2a170c" stroke-width="3"/>
+
+      <!-- skin/membrane soundboard: mottled hide texture instead of wood grain -->
+      <g opacity=".5">
+        <circle cx="120" cy="240" r="2.2" fill="#5a4224"/>
+        <circle cx="150" cy="210" r="1.6" fill="#5a4224"/>
+        <circle cx="260" cy="225" r="2" fill="#5a4224"/>
+        <circle cx="290" cy="260" r="1.8" fill="#5a4224"/>
+        <circle cx="100" cy="320" r="1.8" fill="#5a4224"/>
+        <circle cx="305" cy="330" r="2.2" fill="#5a4224"/>
+        <circle cx="130" cy="400" r="1.6" fill="#5a4224"/>
+        <circle cx="270" cy="410" r="2" fill="#5a4224"/>
+        <circle cx="200" cy="200" r="1.8" fill="#5a4224"/>
+        <circle cx="200" cy="460" r="1.6" fill="#5a4224"/>
+        <circle cx="160" cy="440" r="1.4" fill="#5a4224"/>
+        <circle cx="240" cy="440" r="1.4" fill="#5a4224"/>
+      </g>
+      <path d="M90 230 C 150 265, 250 265, 310 230" stroke="#6b4e2a" stroke-width="1" opacity=".25" fill="none"/>
+      <path d="M78 310 C 150 345, 250 345, 322 310" stroke="#6b4e2a" stroke-width="1" opacity=".22" fill="none"/>
+      <path d="M85 390 C 150 418, 250 418, 315 390" stroke="#6b4e2a" stroke-width="1" opacity=".2" fill="none"/>
+
+      <!-- single simple rosette, softer look -->
+      <circle cx="200" cy="310" r="38" fill="#231a10" opacity=".85"/>
+      <circle class="rosette-ring" cx="200" cy="310" r="38" opacity=".4"/>
+      <circle class="rosette-ring" cx="200" cy="310" r="30" opacity=".3"/>
+
+      <!-- bridge -->
+      <rect x="164" y="424" width="72" height="9" rx="3" fill="#2a170c"/>
+
+      <g id="stringsMelayu"></g>
+    </svg>
+
   </div>
 
   <div class="hint"><span class="dot"></span> tap a string to pluck it</div>
@@ -226,9 +333,9 @@
 <script>
 (function(){
   const svgNS = "http://www.w3.org/2000/svg";
-  const stringsGroup = document.getElementById('strings');
 
-  // 11 strings: note name + frequency (Hz), spanning ~2 octaves, D minor / hijaz-leaning flavor
+  // 11 strings per instrument, same base tuning (D3–D5) but each
+  // instrument's pluck timbre differs to reflect wood vs. skin soundboard
   const strings = [
     { note:'D3', freq:146.83 },
     { note:'F3', freq:174.61 },
@@ -243,48 +350,79 @@
     { note:'D5', freq:587.33 }
   ];
 
-  const bridgeY = 452;
-  const headY = 4;
-  const startX = 182;
-  const endX = 218;
-  const n = strings.length;
-
-  strings.forEach((s, i) => {
-    const x = startX + (i * (endX - startX) / (n - 1));
-    const g = document.createElementNS(svgNS, 'g');
-    g.setAttribute('class', 'string-hit');
-    g.setAttribute('data-index', i);
-
-    // wide invisible hit area for easy tapping
-    const hit = document.createElementNS(svgNS, 'line');
-    hit.setAttribute('x1', x); hit.setAttribute('y1', headY);
-    hit.setAttribute('x2', x); hit.setAttribute('y2', bridgeY);
-    hit.setAttribute('stroke', 'transparent');
-    hit.setAttribute('stroke-width', '16');
-
-    const line = document.createElementNS(svgNS, 'line');
-    line.setAttribute('x1', x); line.setAttribute('y1', headY);
-    line.setAttribute('x2', x); line.setAttribute('y2', bridgeY);
-    line.setAttribute('class', 'string-line');
-    line.setAttribute('id', 'string-' + i);
-
-    g.appendChild(hit);
-    g.appendChild(line);
-    stringsGroup.appendChild(g);
-
-    // note label near bridge
-    if (i === 0 || i === n - 1 || i === Math.floor(n/2)) {
-      const label = document.createElementNS(svgNS, 'text');
-      label.setAttribute('x', x);
-      label.setAttribute('y', bridgeY + 22);
-      label.setAttribute('text-anchor', 'middle');
-      label.setAttribute('class', 'note-label');
-      label.textContent = s.note;
-      stringsGroup.appendChild(label);
+  const instruments = {
+    hadhramaut: {
+      groupId: 'stringsHadhramaut',
+      bridgeY: 452, headY: 4, startX: 182, endX: 218,
+      profile: {
+        partials: [
+          { mult: 1,    gain: 1.0,  type:'triangle' },
+          { mult: 2,    gain: 0.42, type:'sine' },
+          { mult: 3,    gain: 0.22, type:'sine' },
+          { mult: 4.01, gain: 0.10, type:'sine' },
+          { mult: 5.02, gain: 0.05, type:'sine' }
+        ],
+        decay: 1.7,
+        clickGain: 0.16
+      }
+    },
+    melayu: {
+      groupId: 'stringsMelayu',
+      bridgeY: 424, headY: 4, startX: 182, endX: 218,
+      profile: {
+        partials: [
+          { mult: 1,    gain: 1.0,  type:'sine' },
+          { mult: 2,    gain: 0.20, type:'sine' },
+          { mult: 3,    gain: 0.07, type:'sine' }
+        ],
+        decay: 1.0,
+        clickGain: 0.05
+      }
     }
+  };
 
-    g.addEventListener('click', () => pluck(i));
-  });
+  function buildStrings(key){
+    const inst = instruments[key];
+    const group = document.getElementById(inst.groupId);
+    const n = strings.length;
+
+    strings.forEach((s, i) => {
+      const x = inst.startX + (i * (inst.endX - inst.startX) / (n - 1));
+      const g = document.createElementNS(svgNS, 'g');
+      g.setAttribute('class', 'string-hit');
+
+      const hit = document.createElementNS(svgNS, 'line');
+      hit.setAttribute('x1', x); hit.setAttribute('y1', inst.headY);
+      hit.setAttribute('x2', x); hit.setAttribute('y2', inst.bridgeY);
+      hit.setAttribute('stroke', 'transparent');
+      hit.setAttribute('stroke-width', '16');
+
+      const line = document.createElementNS(svgNS, 'line');
+      line.setAttribute('x1', x); line.setAttribute('y1', inst.headY);
+      line.setAttribute('x2', x); line.setAttribute('y2', inst.bridgeY);
+      line.setAttribute('class', 'string-line');
+      line.setAttribute('id', key + '-string-' + i);
+
+      g.appendChild(hit);
+      g.appendChild(line);
+      group.appendChild(g);
+
+      if (i === 0 || i === n - 1 || i === Math.floor(n/2)) {
+        const label = document.createElementNS(svgNS, 'text');
+        label.setAttribute('x', x);
+        label.setAttribute('y', inst.bridgeY + 20);
+        label.setAttribute('text-anchor', 'middle');
+        label.setAttribute('class', 'note-label');
+        label.textContent = s.note;
+        group.appendChild(label);
+      }
+
+      g.addEventListener('click', () => pluck(key, i));
+    });
+  }
+
+  buildStrings('hadhramaut');
+  buildStrings('melayu');
 
   // --- Audio ---
   let audioCtx = null;
@@ -296,71 +434,84 @@
     return audioCtx;
   }
 
-  function pluckTone(freq){
+  function pluckTone(freq, profile){
     const ctx = ensureCtx();
     const now = ctx.currentTime;
 
     const master = ctx.createGain();
     master.gain.setValueAtTime(0.0001, now);
     master.gain.exponentialRampToValueAtTime(0.5, now + 0.008);
-    master.gain.exponentialRampToValueAtTime(0.0001, now + 1.6);
+    master.gain.exponentialRampToValueAtTime(0.0001, now + profile.decay);
     master.connect(ctx.destination);
 
-    // fundamental + a couple harmonics for a warm plucked-string timbre
-    const partials = [
-      { mult: 1,   gain: 1.0,  type:'triangle' },
-      { mult: 2,   gain: 0.35, type:'sine' },
-      { mult: 3,   gain: 0.15, type:'sine' },
-      { mult: 4.01,gain: 0.06, type:'sine' }
-    ];
-
-    partials.forEach(p => {
+    profile.partials.forEach(p => {
       const osc = ctx.createOscillator();
       osc.type = p.type;
       osc.frequency.setValueAtTime(freq * p.mult, now);
 
       const g = ctx.createGain();
       g.gain.setValueAtTime(p.gain, now);
-      g.gain.exponentialRampToValueAtTime(0.0001, now + 1.4 / Math.sqrt(p.mult));
+      g.gain.exponentialRampToValueAtTime(0.0001, now + profile.decay / Math.sqrt(p.mult));
 
       osc.connect(g);
       g.connect(master);
       osc.start(now);
-      osc.stop(now + 1.7);
+      osc.stop(now + profile.decay + 0.1);
     });
 
-    // tiny percussive click at onset for pluck attack
+    // percussive click at onset for pluck attack (softer for skin soundboard)
     const noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 0.02, ctx.sampleRate);
     const data = noiseBuf.getChannelData(0);
     for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
     const noise = ctx.createBufferSource();
     noise.buffer = noiseBuf;
     const noiseGain = ctx.createGain();
-    noiseGain.gain.setValueAtTime(0.12, now);
+    noiseGain.gain.setValueAtTime(profile.clickGain, now);
     noise.connect(noiseGain);
     noiseGain.connect(master);
     noise.start(now);
   }
 
-  function pluck(i){
+  function pluck(key, i){
     ensureCtx();
-    pluckTone(strings[i].freq);
-    const el = document.getElementById('string-' + i);
+    const inst = instruments[key];
+    pluckTone(strings[i].freq, inst.profile);
+    const el = document.getElementById(key + '-string-' + i);
     el.classList.remove('plucked');
-    void el.offsetWidth; // restart animation
+    void el.offsetWidth;
     el.classList.add('plucked');
     setTimeout(() => el.classList.remove('plucked'), 450);
+    unlockBtn.classList.add('hidden');
   }
 
+  // --- Toggle between instruments ---
+  const captions = {
+    hadhramaut: 'Wooden soundboard, 11 strings — resembles the Arabian oud, brighter tone.',
+    melayu: 'Smaller, pear-shaped, skin-covered soundboard — softer, mellower tone.'
+  };
+
+  const toggleButtons = document.querySelectorAll('#typeToggle button');
+  const svgHadhramaut = document.getElementById('svgHadhramaut');
+  const svgMelayu = document.getElementById('svgMelayu');
+  const typeCaption = document.getElementById('typeCaption');
+
+  toggleButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      toggleButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const type = btn.dataset.type;
+      svgHadhramaut.classList.toggle('active', type === 'hadhramaut');
+      svgMelayu.classList.toggle('active', type === 'melayu');
+      typeCaption.textContent = captions[type];
+    });
+  });
+
+  // --- Unlock ---
   const unlockBtn = document.getElementById('unlockBtn');
   unlockBtn.addEventListener('click', () => {
     ensureCtx();
     unlockBtn.classList.add('hidden');
   });
-
-  // some browsers allow audio context creation without an explicit unlock
-  // once the user interacts with a string directly, so hide button after first pluck too
-  stringsGroup.addEventListener('click', () => unlockBtn.classList.add('hidden'));
 })();
 </script>
 
